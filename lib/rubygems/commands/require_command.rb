@@ -76,28 +76,27 @@ and installs them if necessary.
   private
 
   def require_gem(name, version, installer_options)
-    if installed_version = gem_uptodate?(name, version)
-      say "#{name} (#{installed_version}) is already installed"
-    else
-      say "Installing #{name} ..."
-      install_gem(name, version, installer_options)
-    end
-  end
 
-  def gem_uptodate?(name, version)
     dependency = Gem::Dependency.new(name, version)
-    installed = current_spec(dependency)
-    if installed 
-      if !options[:latest] || installed.version == latest_available_version_of(dependency)
-        installed.version
+    installed = Gem.source_index.search(dependency).last
+
+    if installed && options[:latest]
+      latest_version = latest_available_version_of(dependency)
+      if installed.version < latest_version
+        installed = nil
+        version = latest_version
       end
     end
+
+    if installed
+      say "#{name} (#{installed.version}) is already installed"
+    else
+      say "Installing #{name} (#{version}) ..."
+      install_gem(name, version, installer_options)
+    end
+
   end
 
-  def current_spec(dependency)
-    Gem.source_index.search(dependency).last
-  end
-  
   def latest_available_version_of(dependency)
     Gem::SpecFetcher.fetcher.fetch(dependency).map { |x| x.first.version }.max
   end
