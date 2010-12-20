@@ -3,7 +3,7 @@
 Gem::Specification.new do |gem|
   
   gem.name = "gem_require"
-  gem.version = "0.0.3"
+  gem.version = "0.0.4"
   gem.platform = Gem::Platform::RUBY
 
   gem.homepage = "http://github.com/mdub/gem_require"

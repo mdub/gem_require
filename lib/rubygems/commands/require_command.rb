@@ -1,12 +1,14 @@
 require 'rubygems/command'
 require 'rubygems/dependency_installer'
 require 'rubygems/install_update_options'
+require 'rubygems/local_remote_options'
 require 'rubygems/version_option'
 require 'rubygems/spec_fetcher'
 
 class Gem::Commands::RequireCommand < Gem::Command
 
   include Gem::VersionOption
+  include Gem::LocalRemoteOptions
   include Gem::InstallUpdateOptions
 
   def initialize
@@ -23,13 +25,17 @@ class Gem::Commands::RequireCommand < Gem::Command
 
     super 'require', 'Install or update a gem', defaults
 
-    add_version_option
     add_option('--latest',
                'Get the latest matching version') do |value, options|
       options[:latest] = true
     end
 
     add_install_update_options
+    add_local_remote_options
+
+    add_version_option
+    add_platform_option
+    add_prerelease_option
 
   end
 
