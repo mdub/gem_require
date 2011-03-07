@@ -67,7 +67,7 @@ and installs them if necessary.
       begin
         require_gem(name, version, options)
       rescue Gem::InstallError => e
-        alert_error "Error installing #{gem_name}:\n\t#{e.message}"
+        alert_error "Error installing #{name}:\n\t#{e.message}"
         exit_code |= 1
       rescue Gem::GemNotFoundException => e
         show_lookup_failure e.name, e.version, e.errors
