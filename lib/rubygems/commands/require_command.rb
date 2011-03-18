@@ -70,7 +70,7 @@ and installs them if necessary.
         alert_error "Error installing #{name}:\n\t#{e.message}"
         exit_code |= 1
       rescue Gem::GemNotFoundException => e
-        show_lookup_failure e.name, e.version, e.errors
+        show_lookup_failure e.name, e.version, e.errors, options[:domain]
         exit_code |= 2
       end
     end
