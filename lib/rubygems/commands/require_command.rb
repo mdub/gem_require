@@ -84,7 +84,7 @@ and installs them if necessary.
   def require_gem(name, version, installer_options)
 
     dependency = Gem::Dependency.new(name, version)
-    installed = Gem.source_index.search(dependency).last
+    installed = latest_installed_version_of(dependency)
 
     if installed && options[:latest]
       latest_version = latest_available_version_of(dependency)
@@ -103,6 +103,15 @@ and installs them if necessary.
 
   end
 
+  def latest_installed_version_of(dependency)
+    if dependency.respond_to?(:matching_specs)
+      # Rubygems 1.8+
+      dependency.matching_specs.last
+    else
+      Gem.source_index.search(dependency).last
+    end
+  end
+  
   def latest_available_version_of(dependency)
     Gem::SpecFetcher.fetcher.fetch(dependency).map { |x| x.first.version }.max
   end
