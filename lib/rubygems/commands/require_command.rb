@@ -50,7 +50,7 @@ class Gem::Commands::RequireCommand < Gem::Command
 
   def description # :nodoc:
     <<-EOF
-The require command checks whether the specified gems are installed, 
+The require command checks whether the specified gems are installed,
 and installs them if necessary.
     EOF
   end
@@ -74,11 +74,11 @@ and installs them if necessary.
         exit_code |= 2
       end
     end
-    
+
     exit(exit_code)
 
   end
-  
+
   private
 
   def require_gem(name, version, installer_options)
@@ -111,11 +111,20 @@ and installs them if necessary.
       Gem.source_index.search(dependency).last
     end
   end
-  
-  def latest_available_version_of(dependency)
-    Gem::SpecFetcher.fetcher.fetch(dependency).map { |x| x.first.version }.max
+
+  def matching_tuples(dependency)
+    fetcher = Gem::SpecFetcher.fetcher
+    if fetcher.respond_to?(:search_for_dependency)
+      fetcher.search_for_dependency(dependency).first
+    else
+      fetcher.fetch(dependency)
+    end
   end
-  
+
+  def latest_available_version_of(dependency)
+    matching_tuples(dependency).map { |x| x.first.version }.max
+  end
+
   def install_gem(name, version, installer_options)
     installer = Gem::DependencyInstaller.new(installer_options)
     installer.install(name, version)
@@ -123,5 +132,5 @@ and installs them if necessary.
       say "Installed #{spec.full_name}"
     end
   end
-  
+
 end

@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
-  
+
   gem.name = "gem_require"
-  gem.version = "0.2.0"
+  gem.version = "0.3.0"
   gem.platform = Gem::Platform::RUBY
 
   gem.homepage = "http://github.com/mdub/gem_require"
@@ -16,5 +16,5 @@ except that it does nothing if the specified gem is already installed."
 
   gem.files = Dir["lib/**/*"]
   gem.require_paths = ["lib"]
-  
+
 end
